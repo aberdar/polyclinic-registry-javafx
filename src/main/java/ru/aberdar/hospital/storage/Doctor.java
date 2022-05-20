@@ -11,7 +11,7 @@ public class Doctor {
     private StringProperty name;
     private StringProperty patronymic;
     private StringProperty specialty;
-    private IntegerProperty admissionDay;
+    private StringProperty admissionDay;
     private StringProperty admissionTime;
     private IntegerProperty cabinetNumber;
 
@@ -20,8 +20,8 @@ public class Doctor {
             String name,
             String patronymic,
             String specialty,
-            int admissionDay,
-            int admissionTime,
+            String admissionDay,
+            String admissionTime,
             int cabinetNumber
     ) {
         setSurname(surname);
@@ -61,9 +61,9 @@ public class Doctor {
         return specialty;
     }
 
-    private IntegerProperty admissionDayIntegerProperty() {
+    private StringProperty admissionDayStringProperty() {
         if (admissionDay == null) {
-            admissionDay = new SimpleIntegerProperty();
+            admissionDay = new SimpleStringProperty();
         }
         return admissionDay;
     }
@@ -98,13 +98,12 @@ public class Doctor {
         specialtyStringProperty().set(specialty);
     }
 
-    public void setAdmissionDay(int day) {
-        admissionDayIntegerProperty().set(day);
+    public void setAdmissionDay(String day) {
+        admissionDayStringProperty().set(day);
     }
 
-    public void setAdmissionTime(int time) {
-        if (time == 0) admissionTimeStringProperty().set("9-13");
-        if (time == 1) admissionTimeStringProperty().set("14-17");
+    public void setAdmissionTime(String time) {
+        admissionTimeStringProperty().set(time);
     }
 
     public void setCabinetNumber(int cabinetNumber) {
@@ -127,8 +126,8 @@ public class Doctor {
         return specialtyStringProperty().get();
     }
 
-    public int getAdmissionDay() {
-        return admissionDayIntegerProperty().get();
+    public String getAdmissionDay() {
+        return admissionDayStringProperty().get();
     }
 
     public String getAdmissionTime() {
