@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ru.aberdar.hospital.controllers.DoctorAddDialogController"
+      prefHeight="400.0" prefWidth="600.0" spacing="10" alignment="CENTER">
+    <padding>
+        <Insets left="10"/>
+    </padding>
+    <HBox spacing="10">
+        <Label text="Surname" prefHeight="40" prefWidth="100"/>
+        <TextField fx:id="addSurname" prefHeight="40" prefWidth="200"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Name" prefHeight="40" prefWidth="100"/>
+        <TextField fx:id="addName" prefHeight="40" prefWidth="200"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Patronymic" prefHeight="40" prefWidth="100"/>
+        <TextField fx:id="addPatronymic" prefHeight="40" prefWidth="200"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Specialty" prefHeight="40" prefWidth="100"/>
+        <ChoiceBox fx:id="addSpecialty" prefHeight="40" prefWidth="200"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Day" prefHeight="40" prefWidth="100"/>
+        <ChoiceBox fx:id="addDay" prefHeight="40" prefWidth="200"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Time" prefHeight="40" prefWidth="100"/>
+        <ChoiceBox fx:id="addTime" prefHeight="40" prefWidth="200"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Cabinet" prefHeight="40" prefWidth="100"/>
+        <Spinner fx:id="addCabinet" prefHeight="40" prefWidth="200" editable="true">
+            <valueFactory>
+                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="50" initialValue="1"/>
+            </valueFactory>
+        </Spinner>
+    </HBox>
+    <HBox spacing="10">
+        <Button onAction="#handleOk" prefWidth="100" text="Add"/>
+        <Button onAction="#handleCancel" prefWidth="100" text="Cancel"/>
+    </HBox>
+</VBox>
