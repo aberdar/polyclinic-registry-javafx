@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.aberdar.hospital.controllers.MainWindowController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ru.aberdar.hospital.controllers.MainWindowController"
+      prefHeight="400.0" prefWidth="700.0" spacing="10">
+    <MenuBar fx:id="menu">
+        <Menu text="File">
+            <MenuItem onAction="#openAction" text="Open" />
+            <MenuItem onAction="#saveAction" text="Save" />
+            <SeparatorMenuItem />
+            <MenuItem onAction="#exitAction" text="Exit" />
+        </Menu>
+        <Menu text="Edit">
+            <MenuItem onAction="#addAction" text="Add" />
+            <MenuItem onAction="#editAction" text="Edit" />
+        </Menu>
+        <Menu text="Tools">
+            <MenuItem onAction="#searchAction" text="Search" />
+        </Menu>
+    </MenuBar>
+    <TableView fx:id="table" prefHeight="400" prefWidth="700">
+       <columns>
+           <TableColumn text="Surname" prefWidth="100" fx:id="surnameColumn"/>
+           <TableColumn text="Name" prefWidth="100" fx:id="nameColumn"/>
+           <TableColumn text="Patronymic" prefWidth="100" fx:id="patronymicColumn"/>
+           <TableColumn text="Specialty" prefWidth="100" fx:id="specialtyColumn"/>
+           <TableColumn text="Day" prefWidth="100" fx:id="dayColumn"/>
+           <TableColumn text="Time" prefWidth="100" fx:id="timeColumn"/>
+           <TableColumn text="Cabinet" prefWidth="100" fx:id="cabinetColumn"/>
+       </columns>
+    </TableView>
+</VBox>
