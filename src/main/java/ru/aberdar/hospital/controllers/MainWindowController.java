@@ -152,6 +152,32 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void editAction() {
+        URL url = getClass().getResource("/ru.aberdar.hospital/DoctorEditDialog.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+        Doctor doctor = table.getSelectionModel().getSelectedItem();
+
+        if (doctor != null) {
+            try {
+                Parent root = loader.load();
+                DoctorEditDialogController controller = loader.getController();
+
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                stage.setTitle("Edit doctor");
+                stage.setScene(scene);
+                controller.setDoctor(doctor);
+                controller.setStage(stage);
+                stage.showAndWait();
+
+                if (controller.getButtonType() == ButtonType.OK) {
+                    table.refresh();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        } else {
+            showSelectedError("No edit items.");
+        }
     }
 
     @FXML
