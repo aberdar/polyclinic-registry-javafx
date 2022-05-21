@@ -4,12 +4,17 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import ru.aberdar.hospital.storage.Doctor;
 
 import java.io.BufferedReader;
@@ -121,6 +126,28 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void addAction() {
+        URL url = getClass().getResource("/ru.aberdar.hospital/DoctorAddDialog.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+
+        try {
+            Parent root = loader.load();
+            DoctorAddDialogController controller = loader.getController();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            Doctor doctor = new Doctor("", "", "", "", "", "", 0);
+            stage.setTitle("Add doctor");
+            stage.setScene(scene);
+            controller.setStage(stage);
+            controller.setDoctor(doctor);
+            stage.showAndWait();
+
+            if (controller.getButtonType() == ButtonType.OK) {
+                table.getItems().add(doctor);
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @FXML
