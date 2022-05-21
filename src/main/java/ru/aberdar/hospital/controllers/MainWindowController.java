@@ -181,7 +181,35 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    public void searchAction() {
+    public void searchBySpecialtyAction() {
+
+    }
+
+    @FXML
+    public void searchByDay() {
+        URL url = getClass().getResource("/ru.aberdar.hospital/SearchByDayDialog.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+        String searchDay;
+
+        try {
+            Parent root = loader.load();
+            SearchByDayDialogController controller = loader.getController();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Search by day");
+            stage.setScene(scene);
+            controller.setStage(stage);
+            stage.showAndWait();
+
+            if (controller.getButtonType() == ButtonType.OK) {
+                searchDay = controller.getSearchDay();
+                stage.close();
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
     }
 
     @Override

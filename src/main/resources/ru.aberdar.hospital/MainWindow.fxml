@@ -19,7 +19,8 @@
             <MenuItem onAction="#editAction" text="Edit" />
         </Menu>
         <Menu text="Tools">
-            <MenuItem onAction="#searchAction" text="Search" />
+            <MenuItem onAction="#searchBySpecialtyAction" text="Search by specialty"/>
+            <MenuItem onAction="#searchByDay" text="Search by day"/>
         </Menu>
     </MenuBar>
     <TableView fx:id="table" prefHeight="400" prefWidth="700">
