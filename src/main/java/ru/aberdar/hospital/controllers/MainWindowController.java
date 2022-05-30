@@ -3,6 +3,7 @@ package ru.aberdar.hospital.controllers;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,6 +24,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.zip.DataFormatException;
 
@@ -45,10 +47,11 @@ public class MainWindowController implements Initializable {
     @FXML
     private TableColumn<Doctor, Integer> cabinetColumn;
 
+    private final ObservableList<Doctor> doctors = FXCollections.observableArrayList();
+
     @FXML
     public void openAction() {
         try {
-            ObservableList<Doctor> doctors = FXCollections.observableArrayList();
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open file");
             File file = fileChooser.showOpenDialog(null);
@@ -60,15 +63,15 @@ public class MainWindowController implements Initializable {
                 try {
                     String[] data = str.split(" +");
                     if (str.isEmpty()) break;
-                    if (data.length != 7) throw new DataFormatException("Insufficient data.");
+                    if (data.length != 10) throw new DataFormatException("Insufficient data.");
 
                     String surname = data[0];
                     String name = data[1];
                     String patronymic = data[2];
                     String specialty = data[3];
                     String day = data[4];
-                    String time = data[5];
-                    int cabinet = Integer.parseInt(data[6]);
+                    String time = data[5] + " " + data[6] + " " +  data[7] + " " + data[8];
+                    int cabinet = Integer.parseInt(data[9]);
 
                     Doctor doctor = new Doctor(
                             surname,
@@ -110,7 +113,7 @@ public class MainWindowController implements Initializable {
                         doctor.getSpecialty() + " " +
                         doctor.getAdmissionDay() + " " +
                         doctor.getAdmissionTime() + " " +
-                        doctor.getCabinetNumber() + "/n"
+                        doctor.getCabinetNumber() + "\n"
                 );
             }
             out.close();
@@ -189,7 +192,7 @@ public class MainWindowController implements Initializable {
     public void searchByDay() {
         URL url = getClass().getResource("/ru.aberdar.hospital/SearchByDayDialog.fxml");
         FXMLLoader loader = new FXMLLoader(url);
-        String searchDay;
+        String searchDay = null;
 
         try {
             Parent root = loader.load();
@@ -204,12 +207,29 @@ public class MainWindowController implements Initializable {
 
             if (controller.getButtonType() == ButtonType.OK) {
                 searchDay = controller.getSearchDay();
+
+                List<Doctor> finalSearchDayData = FXCollections.observableArrayList();
+                ObservableList<Doctor> doctorsCopy = FXCollections.observableArrayList(doctors);
+                String finalSearchDay = searchDay;
+                doctorsCopy.stream()
+                         .filter(element -> element.getAdmissionDay().equals(finalSearchDay))
+                         .forEach(finalSearchDayData::add);
+
+                table.getItems().clear();
+                table.getItems().addAll(finalSearchDayData);
+
                 stage.close();
             }
+
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
 
+    @FXML
+    public void refreshTable() {
+        table.getItems().clear();
+        table.setItems(doctors);
     }
 
     @Override

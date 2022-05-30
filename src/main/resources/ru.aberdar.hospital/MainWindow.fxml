@@ -21,6 +21,7 @@
         <Menu text="Tools">
             <MenuItem onAction="#searchBySpecialtyAction" text="Search by specialty"/>
             <MenuItem onAction="#searchByDay" text="Search by day"/>
+            <MenuItem onAction="#refreshTable" text="Refresh table"/>
         </Menu>
     </MenuBar>
     <TableView fx:id="table" prefHeight="400" prefWidth="700">
