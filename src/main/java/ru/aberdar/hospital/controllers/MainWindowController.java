@@ -137,16 +137,17 @@ public class MainWindowController implements Initializable {
 
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            Doctor doctor = new Doctor("", "", "", "", "", "", 0);
+            Doctor newDoctor = new Doctor("", "", "", "", "", "", 0);
             stage.setTitle("Add doctor");
             stage.setScene(scene);
             controller.setStage(stage);
-            controller.setDoctor(doctor);
+            controller.setDoctor(newDoctor);
             controller.setDoctorsData(doctors);
             stage.showAndWait();
 
             if (controller.getButtonType() == ButtonType.OK) {
-                table.getItems().add(doctor);
+                doctors.add(newDoctor);
+                table.setItems(doctors);
             }
         } catch (IOException exception) {
             exception.printStackTrace();
