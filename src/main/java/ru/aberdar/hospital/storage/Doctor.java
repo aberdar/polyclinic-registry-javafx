@@ -5,6 +5,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.DataFormatException;
+
 public class Doctor {
 
     private StringProperty surname;
@@ -15,6 +20,27 @@ public class Doctor {
     private StringProperty admissionTime;
     private IntegerProperty cabinetNumber;
 
+    private final Set<String> dayData = new HashSet<>(List.of(new String[]{
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+    }));
+    private final Set<String> timeData = new HashSet<>(List.of(new String[]{
+            "From 8 to 13",
+            "From 14 to 19"
+    }));
+    private final Set<String> specialtyData = new HashSet<>(List.of(new String[]{
+            "Allergist",
+            "Anesthesiologist",
+            "Cardiologist",
+            "Dentist",
+            "Geneticist"
+    }));
+
     public Doctor(
             String surname,
             String name,
@@ -23,7 +49,7 @@ public class Doctor {
             String admissionDay,
             String admissionTime,
             int cabinetNumber
-    ) {
+    ) throws DataFormatException {
         setSurname(surname);
         setName(name);
         setPatronymic(patronymic);
@@ -82,31 +108,55 @@ public class Doctor {
         return cabinetNumber;
     }
 
-    public void setSurname(String surname) {
+    public void setSurname(String surname) throws DataFormatException {
+        if (!Character.isUpperCase(surname.charAt(0)) ||
+            !surname.matches("[a-zA-Z]+")) {
+            throw new DataFormatException("No valid surname.");
+        }
         surnameStringProperty().set(surname);
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws DataFormatException {
+        if (!Character.isUpperCase(name.charAt(0)) ||
+            !name.matches("[a-zA-Z]+")) {
+            throw new DataFormatException("No valid name.");
+        }
         nameStringProperty().set(name);
     }
 
-    public void setPatronymic(String patronymic) {
+    public void setPatronymic(String patronymic) throws DataFormatException {
+        if (!Character.isUpperCase(patronymic.charAt(0)) ||
+            !patronymic.matches("[a-zA-Z]+")) {
+            throw new DataFormatException("No valid patronymic.");
+        }
         patronymicStringProperty().set(patronymic);
     }
 
-    public void setSpecialty(String specialty) {
+    public void setSpecialty(String specialty) throws DataFormatException {
+        if (!specialtyData.contains(specialty)) {
+            throw new DataFormatException("No valid specialty.");
+        }
         specialtyStringProperty().set(specialty);
     }
 
-    public void setAdmissionDay(String day) {
+    public void setAdmissionDay(String day) throws DataFormatException {
+        if (!dayData.contains(day)) {
+            throw new DataFormatException("No valid day.");
+        }
         admissionDayStringProperty().set(day);
     }
 
-    public void setAdmissionTime(String time) {
+    public void setAdmissionTime(String time) throws DataFormatException {
+        if (!timeData.contains(time)) {
+            throw new DataFormatException("No valid time.");
+        }
         admissionTimeStringProperty().set(time);
     }
 
-    public void setCabinetNumber(int cabinetNumber) {
+    public void setCabinetNumber(int cabinetNumber) throws DataFormatException {
+        if (cabinetNumber < 1) {
+            throw new DataFormatException("No valid cabinet number.");
+        }
         cabinetNumberIntegerProperty().set(cabinetNumber);
     }
 

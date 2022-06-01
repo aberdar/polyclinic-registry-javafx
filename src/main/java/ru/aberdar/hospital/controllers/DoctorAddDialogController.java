@@ -13,7 +13,8 @@ import javafx.stage.Stage;
 import ru.aberdar.hospital.storage.Doctor;
 
 import java.net.URL;
-import java.util.ResourceBundle;;
+import java.util.ResourceBundle;
+import java.util.zip.DataFormatException;;
 
 public class DoctorAddDialogController implements Initializable {
 
@@ -161,7 +162,7 @@ public class DoctorAddDialogController implements Initializable {
     }
 
     @FXML
-    public void handleOk() {
+    public void handleOk() throws DataFormatException {
         if (isInputValid()) {
             doctor.setSurname(addSurname.getText());
             doctor.setName(addName.getText());

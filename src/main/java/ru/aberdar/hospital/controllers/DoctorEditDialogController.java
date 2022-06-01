@@ -15,6 +15,7 @@ import ru.aberdar.hospital.storage.Doctor;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.zip.DataFormatException;
 
 public class DoctorEditDialogController implements Initializable {
 
@@ -172,7 +173,7 @@ public class DoctorEditDialogController implements Initializable {
 
 
     @FXML
-    public void handleOk() {
+    public void handleOk() throws DataFormatException {
         if (isInputValid()) {
             doctor.setSurname(editSurname.getText());
             doctor.setName(editName.getText());

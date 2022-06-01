@@ -137,7 +137,15 @@ public class MainWindowController implements Initializable {
 
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            Doctor newDoctor = new Doctor("", "", "", "", "", "", 0);
+            Doctor newDoctor = new Doctor(
+                    "A",
+                    "A",
+                    "A",
+                    "Allergist",
+                    "Monday",
+                    "From 8 to 13",
+                    1
+            );
             stage.setTitle("Add doctor");
             stage.setScene(scene);
             controller.setStage(stage);
@@ -149,7 +157,7 @@ public class MainWindowController implements Initializable {
                 doctors.add(newDoctor);
                 table.setItems(doctors);
             }
-        } catch (IOException exception) {
+        } catch (IOException | DataFormatException exception) {
             exception.printStackTrace();
         }
     }
