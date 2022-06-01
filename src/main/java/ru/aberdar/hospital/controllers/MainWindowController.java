@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 
 public class MainWindowController implements Initializable {
@@ -147,6 +148,7 @@ public class MainWindowController implements Initializable {
 
             if (controller.getButtonType() == ButtonType.OK) {
                 table.getItems().add(doctor);
+                doctors.add(doctor);
             }
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -208,15 +210,12 @@ public class MainWindowController implements Initializable {
             if (controller.getButtonType() == ButtonType.OK) {
                 searchDay = controller.getSearchDay();
 
-                List<Doctor> finalSearchDayData = FXCollections.observableArrayList();
-                ObservableList<Doctor> doctorsCopy = FXCollections.observableArrayList(doctors);
+                ObservableList<Doctor> sortedData = FXCollections.observableArrayList();
                 String finalSearchDay = searchDay;
-                doctorsCopy.stream()
-                         .filter(element -> element.getAdmissionDay().equals(finalSearchDay))
-                         .forEach(finalSearchDayData::add);
-
-                table.getItems().clear();
-                table.getItems().addAll(finalSearchDayData);
+                sortedData.setAll(doctors.stream()
+                        .filter(element -> element.getAdmissionDay().equals(finalSearchDay))
+                        .collect(Collectors.toList()));
+                table.setItems(sortedData);
 
                 stage.close();
             }
@@ -228,7 +227,6 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void refreshTable() {
-        table.getItems().clear();
         table.setItems(doctors);
     }
 
