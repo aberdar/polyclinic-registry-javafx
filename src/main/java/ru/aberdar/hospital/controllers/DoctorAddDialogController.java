@@ -91,6 +91,10 @@ public class DoctorAddDialogController implements Initializable {
             errorMessage += "The number of working days per week exceeds five\n";
         }
 
+        if (!checkingDuplicateCabinet()) {
+            errorMessage += "Incorrect cabinet number.\n";
+        }
+
         return errorMessage.length() == 0;
     }
 
@@ -127,6 +131,22 @@ public class DoctorAddDialogController implements Initializable {
         }
 
         return workingDay.split(" ").length <= 5;
+    }
+
+    /**
+     * Checking for duplicate cabinet
+     * @return false if it has not passed the verification
+     */
+    private boolean checkingDuplicateCabinet() {
+        for (Doctor element: doctorsData) {
+            if (element.getAdmissionDay().equals(addDay.getSelectionModel().getSelectedItem()) &&
+                element.getAdmissionTime().equals(addTime.getSelectionModel().getSelectedItem()) &&
+                element.getCabinetNumber() == addCabinet.getValue()
+            ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
