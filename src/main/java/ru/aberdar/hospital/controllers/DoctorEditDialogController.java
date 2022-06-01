@@ -1,5 +1,7 @@
 package ru.aberdar.hospital.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,6 +38,7 @@ public class DoctorEditDialogController implements Initializable {
     private ButtonType buttonType = ButtonType.CANCEL;
     private String errorMessage = "";
 
+    private final ObservableList<Doctor> doctorsData = FXCollections.observableArrayList();
     private final String[] specialtyData = {"Allergist", "Anesthesiologist", "Cardiologist", "Dentist", "Geneticist"};
     private final String[] dayData = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private final String[] timeData = {"From 8 to 13", "From 14 to 19"};
@@ -54,6 +57,10 @@ public class DoctorEditDialogController implements Initializable {
         editDay.setValue(this.doctor.getAdmissionDay());
         editTime.setValue(this.doctor.getAdmissionTime());
         editCabinet.getValueFactory().setValue(this.doctor.getCabinetNumber());
+    }
+
+    public void setDoctorsData(ObservableList<Doctor> data) {
+        this.doctorsData.setAll(data);
     }
 
     public ButtonType getButtonType() {
@@ -85,8 +92,84 @@ public class DoctorEditDialogController implements Initializable {
             errorMessage += "No valid patronymic.\n";
         }
 
+        if (!checkingTimeInterval()) {
+            errorMessage += "Incorrect working time interval.\n";
+        }
+
+        if (!checkingNumberOfWorkingDays()) {
+            errorMessage += "The number of working days per week exceeds five\n";
+        }
+
+        if (!checkingDuplicateCabinet()) {
+            errorMessage += "Incorrect cabinet number.\n";
+        }
+
         return errorMessage.length() == 0;
     }
+
+    /**
+     * Checking for work in two shifts
+     * @return false if it has not passed the verification
+     */
+    private boolean checkingTimeInterval() {
+        for (Doctor element: doctorsData) {
+            if (!foundDoctor(element) &&
+                element.getAdmissionDay().equals(editDay.getSelectionModel().getSelectedItem()) &&
+                element.getAdmissionTime() != null
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checking for a five-day working week
+     * @return false if it has not passed the verification
+     */
+    private boolean checkingNumberOfWorkingDays() {
+        String workingDay = "";
+        for (Doctor element: doctorsData) {
+            if (foundDoctor(element) &&
+                    !workingDay.contains(element.getAdmissionDay())) {
+                workingDay += element.getAdmissionDay() + " ";
+            }
+        }
+
+        if (!workingDay.contains(editDay.getSelectionModel().getSelectedItem())) {
+            workingDay += editDay.getSelectionModel().getSelectedItem() + " ";
+        }
+
+        return workingDay.split(" ").length <= 5;
+    }
+
+    /**
+     * Checking for duplicate cabinet
+     * @return false if it has not passed the verification
+     */
+    private boolean checkingDuplicateCabinet() {
+        for (Doctor element: doctorsData) {
+            if (element.getAdmissionDay().equals(editDay.getSelectionModel().getSelectedItem()) &&
+                    element.getAdmissionTime().equals(editTime.getSelectionModel().getSelectedItem()) &&
+                    element.getCabinetNumber() == editCabinet.getValue()
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Search for the appropriate doctor
+     * @param searchingDoctor - doctor to check compliance
+     * @return true if doctor matches
+     */
+    private boolean foundDoctor(Doctor searchingDoctor) {
+        return searchingDoctor.getName().equals(editName.getText()) &&
+                searchingDoctor.getSurname().equals(editSurname.getText()) &&
+                searchingDoctor.getPatronymic().equals(editPatronymic.getText());
+    }
+
 
     @FXML
     public void handleOk() {
