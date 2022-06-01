@@ -1,5 +1,7 @@
 package ru.aberdar.hospital.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -11,7 +13,7 @@ import javafx.stage.Stage;
 import ru.aberdar.hospital.storage.Doctor;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.ResourceBundle;;
 
 public class DoctorAddDialogController implements Initializable {
 
@@ -32,6 +34,7 @@ public class DoctorAddDialogController implements Initializable {
 
     private Stage stage;
     private Doctor doctor;
+    private final ObservableList<Doctor> doctorsData = FXCollections.observableArrayList();
     private ButtonType buttonType = ButtonType.CANCEL;
     private String errorMessage = "";
 
@@ -45,6 +48,10 @@ public class DoctorAddDialogController implements Initializable {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    public void setDoctorsData(ObservableList<Doctor> data) {
+        this.doctorsData.addAll(data);
     }
 
     public ButtonType getButtonType() {
@@ -76,7 +83,61 @@ public class DoctorAddDialogController implements Initializable {
             errorMessage += "No valid patronymic.\n";
         }
 
+        if (!checkingTimeInterval()) {
+            errorMessage += "Incorrect working time interval.\n";
+        }
+
+        if (!checkingNumberOfWorkingDays()) {
+            errorMessage += "The number of working days per week exceeds five\n";
+        }
+
         return errorMessage.length() == 0;
+    }
+
+    /**
+     * Checking for work in two shifts
+     * @return false if it has not passed the verification
+     */
+    private boolean checkingTimeInterval() {
+        for (Doctor element: doctorsData) {
+            if (foundDoctor(element) &&
+                element.getAdmissionDay().equals(addDay.getSelectionModel().getSelectedItem()) &&
+                element.getAdmissionTime() != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checking for a five-day working week
+     * @return false if it has not passed the verification
+     */
+    private boolean checkingNumberOfWorkingDays() {
+        String workingDay = "";
+        for (Doctor element: doctorsData) {
+            if (foundDoctor(element) &&
+                !workingDay.contains(element.getAdmissionDay())) {
+                workingDay += element.getAdmissionDay() + " ";
+            }
+        }
+
+        if (!workingDay.contains(addDay.getSelectionModel().getSelectedItem())) {
+                workingDay += addDay.getSelectionModel().getSelectedItem() + " ";
+        }
+
+        return workingDay.split(" ").length <= 5;
+    }
+
+    /**
+     * Search for the appropriate doctor
+     * @param searchingDoctor - doctor to check compliance
+     * @return true if doctor matches
+     */
+    private boolean foundDoctor(Doctor searchingDoctor) {
+        return searchingDoctor.getName().equals(addName.getText()) &&
+               searchingDoctor.getSurname().equals(addSurname.getText()) &&
+               searchingDoctor.getPatronymic().equals(addPatronymic.getText());
     }
 
     @FXML

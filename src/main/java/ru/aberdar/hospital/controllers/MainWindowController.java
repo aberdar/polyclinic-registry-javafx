@@ -142,6 +142,7 @@ public class MainWindowController implements Initializable {
             stage.setScene(scene);
             controller.setStage(stage);
             controller.setDoctor(doctor);
+            controller.setDoctorsData(doctors);
             stage.showAndWait();
 
             if (controller.getButtonType() == ButtonType.OK) {
