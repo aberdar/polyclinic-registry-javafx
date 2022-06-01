@@ -3,7 +3,6 @@ package ru.aberdar.hospital.controllers;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +23,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
@@ -148,7 +146,6 @@ public class MainWindowController implements Initializable {
 
             if (controller.getButtonType() == ButtonType.OK) {
                 table.getItems().add(doctor);
-                doctors.add(doctor);
             }
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -187,14 +184,61 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void searchBySpecialtyAction() {
+        URL url = getClass().getResource("/ru.aberdar.hospital/SearchBySpecialtyDialog.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
 
+        try {
+            Parent root = loader.load();
+            SearchBySpecialtyController controller = loader.getController();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Search by specialty");
+            stage.setScene(scene);
+            controller.setStage(stage);
+            stage.showAndWait();
+
+            if (controller.getButtonType() == ButtonType.OK) {
+                String searchSpecialty = controller.getSearchSpecialty();
+
+                ObservableList<Doctor> sortedData = FXCollections.observableArrayList();
+                sortedData.setAll(doctors.stream()
+                        .filter(element -> element.getSpecialty().equals(searchSpecialty))
+                        .collect(Collectors.toList())
+                );
+                showDialogWithSearchBySpecialty(sortedData);
+
+                stage.close();
+            }
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void showDialogWithSearchBySpecialty(ObservableList<Doctor> sortedData) {
+        URL url = getClass().getResource("/ru.aberdar.hospital/ShowSearchBySpecialtyDialog.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+
+        try {
+            Parent root = loader.load();
+            ShowSearchBySpecialtyController controller = loader.getController();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setTitle("Search by specialty");
+            stage.setScene(scene);
+            controller.setDoctorsData(sortedData);
+            stage.show();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @FXML
     public void searchByDay() {
         URL url = getClass().getResource("/ru.aberdar.hospital/SearchByDayDialog.fxml");
         FXMLLoader loader = new FXMLLoader(url);
-        String searchDay = null;
 
         try {
             Parent root = loader.load();
@@ -208,13 +252,13 @@ public class MainWindowController implements Initializable {
             stage.showAndWait();
 
             if (controller.getButtonType() == ButtonType.OK) {
-                searchDay = controller.getSearchDay();
+                String searchDay = controller.getSearchDay();
 
                 ObservableList<Doctor> sortedData = FXCollections.observableArrayList();
-                String finalSearchDay = searchDay;
                 sortedData.setAll(doctors.stream()
-                        .filter(element -> element.getAdmissionDay().equals(finalSearchDay))
-                        .collect(Collectors.toList()));
+                        .filter(element -> element.getAdmissionDay().equals(searchDay))
+                        .collect(Collectors.toList())
+                );
                 table.setItems(sortedData);
 
                 stage.close();

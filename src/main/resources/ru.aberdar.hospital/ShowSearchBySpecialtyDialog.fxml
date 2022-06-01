@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.aberdar.hospital.controllers.ShowSearchBySpecialtyController"
+            prefHeight="400.0" prefWidth="600.0">
+    <TableView fx:id="table" prefHeight="600" prefWidth="700">
+        <columns>
+            <TableColumn text="Surname" prefWidth="100" fx:id="surnameColumn"/>
+            <TableColumn text="Name" prefWidth="100" fx:id="nameColumn"/>
+            <TableColumn text="Patronymic" prefWidth="100" fx:id="patronymicColumn"/>
+            <TableColumn text="Day" prefWidth="100" fx:id="dayColumn"/>
+            <TableColumn text="Time" prefWidth="100" fx:id="timeColumn"/>
+            <TableColumn text="Cabinet" prefWidth="100" fx:id="cabinetColumn"/>
+        </columns>
+    </TableView>
+</VBox>
